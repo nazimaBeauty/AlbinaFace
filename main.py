@@ -1,3 +1,4 @@
+from openpyxl import load_workbook
 import cv2
 from facerec import SimpleFacerec
 from datetime import datetime, timedelta
@@ -187,9 +188,12 @@ while i < 5:
                         (0, 255, 0), 2)
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 200), 4)
             if name != "Your lesson not today" and lessonChecker:
-                text_file = open("data.txt", "w")
-                text_file.write(name)
-                text_file.close()
+                fn = 'Data.xlsx'
+                wb = load_workbook(fn)
+                ws = wb['data']
+                ws.append([name, current_time])
+                wb.save(fn)
+                wb.close()
                 lessonChecker = False
 
         cv2.imshow('livestream', frame)
@@ -209,5 +213,3 @@ while i < 5:
     cv2.destroyAllWindows()
 
     i = i + 10
-
-
